@@ -1,0 +1,7 @@
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\obj\Debug\OptimizationMethod.csprojAssemblyReference.cache
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\obj\Debug\OptimizationMethod.csproj.CoreCompileInputs.cache
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\bin\Debug\OptimizationMethod.exe.config
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\bin\Debug\OptimizationMethod.exe
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\bin\Debug\OptimizationMethod.pdb
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\obj\Debug\OptimizationMethod.exe
+C:\Users\lenovo\Desktop\OptimizationMethod\OptimizationMethod\obj\Debug\OptimizationMethod.pdb
