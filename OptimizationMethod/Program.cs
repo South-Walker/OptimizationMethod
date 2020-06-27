@@ -1,7 +1,9 @@
-﻿#define DEBUGE
+﻿#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.IO;
 
 namespace OptimizationMethod
 {
@@ -20,11 +22,15 @@ namespace OptimizationMethod
         }
         public bool isSecret(string a)
         {
-#if DEBUGE
+#if DEBUG
             Console.WriteLine("secret is \"{0}\",answer is \"{0}\"", value, a);
             Console.WriteLine("solve with {0} guess", GuessCount);
 #endif
             return string.Equals(value, a);
+        }
+        public int HowManyTimeBeAsked()
+        {
+            return GuessCount;
         }
     }
     static class ValideUtil
@@ -37,14 +43,15 @@ namespace OptimizationMethod
             string[] dict = CreateRandomDictionary(strlen, dictionaryScale);
             for (int i = 0; i < questionCount; i++)
             {
-                int secret = r.Next(0, dictionaryScale);
+                int secret = r.Next(0, dict.Length);
                 questions[i] = new Question(dict[secret], dict);
             }
             return questions;
         }
         private static string[] CreateRandomDictionary(int strlen, int scale)
         {
-            string[] dictionary = new string[scale];
+            //string[] dictionary = new string[scale];
+            List<string> dictionary = new List<string>();
             for (int i = 0; i < scale; i++)
             {
                 StringBuilder sb = new StringBuilder(strlen);
@@ -52,9 +59,9 @@ namespace OptimizationMethod
                 {
                     sb.Append((char)('a' + r.Next(0, 26)));
                 }
-                dictionary[i] = sb.ToString();
+                dictionary.Add(sb.ToString());
             }
-            return dictionary;
+            return dictionary.Distinct().ToArray();
         }
     }
     static class CalcUtil
@@ -268,7 +275,7 @@ namespace OptimizationMethod
                 }
             }
         }
-        public string Solve()
+        public int Solve()
         {
             string select;
             int hitcount;
@@ -281,9 +288,9 @@ namespace OptimizationMethod
             }
             if (PossibleWordsCount != 1)
             {
-                return null;
+                throw new Exception("can't solve");
             }
-            return FirstPossibilityWord();
+            return Host.HowManyTimeBeAsked();
         }
         public bool isSecret(string a)
         {
@@ -302,14 +309,35 @@ namespace OptimizationMethod
     {
         static void Main(string[] args)
         {
-            Question[] qs = ValideUtil.CreateValidation(10, 15, 500);
-            for (int i = 0; i < qs.Length; i++)
-            {
-                Console.WriteLine("Question {0}", i + 1);
-                string a = qs[i].Solve();
-                qs[i].isSecret(a);
-            }
+            Test3D();
             Console.Read();
+        }
+        static void Test3D()
+        {
+            string path = @"C:\Users\lenovo\Desktop\data.txt";
+            int pertime = 20;
+            int meantime = 0;
+            using (FileStream fs = new FileStream(path,FileMode.Create,FileAccess.Write))
+            {
+                StreamWriter sw = new StreamWriter(fs);
+                for (int length = 3; length < 10; length++)
+                {
+                    for (int scale = 100; scale <= 1000; scale += 100)
+                    {
+                        Console.WriteLine("strlen={0},scale={1}", length, scale);
+                        meantime = 0;
+                        sw.WriteLine("{0},{1}", length, scale);
+                        Question[] qs = ValideUtil.CreateValidation(pertime, length, scale);
+                        for (int i = 0; i < qs.Length; i++)
+                        {
+                            Console.WriteLine("Question:{0}", i);
+                            meantime = qs[i].Solve();
+                            sw.WriteLine("{0}:{1}", i, meantime);
+                        }
+                        sw.Flush();
+                    }
+                }
+            }
         }
     }
 }
